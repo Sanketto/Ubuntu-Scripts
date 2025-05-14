@@ -1,8 +1,12 @@
 import subprocess
 
 process = subprocess.run("on_ac_power && echo 1 || echo 0", shell=True, capture_output=True, text=True)
+#print(process)
 
-if process.stdout == "1":
-    subprocess.run("powerprofilesctl set performance", shell=True, capture_output=True, text=True)
+if int(process.stdout) == 1:
+    result = subprocess.run("powerprofilesctl set performance", shell=True, capture_output=True, text=True)
+    print(result)
+    
 else:
-    subprocess.run("powerprofilesctl set balance", shell=True, capture_output=True, text=True)
+    result = subprocess.run("powerprofilesctl set balanced", shell=True, capture_output=True, text=True)
+    print(result)
