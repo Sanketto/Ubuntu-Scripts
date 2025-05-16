@@ -9,7 +9,9 @@ def run_command(command):
             print("Command executed successfully:")
         else:
             print(f"Error executing command (exit code {process.returncode}):")
-        process = subprocess.run("wait", shell=True, capture_output=True, text=True)
+        subprocess.run("wait", shell=True, capture_output=True, text=True)
+        subprocess.run("echo", shell=True, capture_output=True, text=True)
+        subprocess.run("echo", shell=True, capture_output=True, text=True)
 
 def get_file(file_folder):
      file_path = os.getcwd() + f"/{file_folder}"
@@ -85,3 +87,6 @@ def install_zscaler():
      files = get_file("Zscaler")
      for file in files:
         run_command([f"Zscaler/{file}", "--mode", "unattended"])
+
+def remove_program(program):
+    run_command(["apt", "autoremove", "--purge", f"{program}"])
