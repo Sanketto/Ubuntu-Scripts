@@ -19,26 +19,27 @@ def run_command(command):
 def get_file(file_folder):
      file_path = os.getcwd() + f"/{file_folder}"
      files = os.listdir(file_path)
-     print(files)
-     for file in files:
+     # print(files)
+     n = len(files) - 1
+     while n >= 0:
+          # print(files[n])
           # process = subprocess.run(f"file {file_path}/{file}", shell=True, capture_output=True, text=True)
           # print(process.stdout)
-          if ".deb" in file or ".sh" in file or ".run" in file or ".bin" in file:
+          if ".deb" in files[n] or ".sh" in files[n] or ".run" in files[n] or ".bin" in files[n]:
+          #    print(files[n])
              pass
           else:
-             files.remove(file)
+             files.remove(files[n])
+          n -= 1 
+     print(files)
      return files
 
 def install_cortex():
-     c1 = ["mkdir", "-p", "/etc/panw"]
-     c2 = ["cp", "-rv", "cortex/*.conf", "/etc/panw/"]
-     c3 = ""
      files = get_file("cortex")
+     process = subprocess.run("mkdir -p /etc/panw", shell=True, capture_output=True, text=True)
+     process = subprocess.run("cp -rv cortex/*conf /etc/panw", shell=True, capture_output=True, text=True)
      for file in files:
-         c3 = ["dpkg", "-i", f"cortex/{file}"] 
-     run_command(c1)
-     run_command(c2)
-     run_command(c3)
+         subprocess.call(["dpkg", "-i", f"cortex/{file}"] )
 
 def install_globalprotect():
      #run_command(command)
@@ -51,15 +52,15 @@ def install_gtb_agent():
      file_folder = "GTB"
      release = lsb_release.get_os_release()['RELEASE']
      if release == "18.04":
-          files = get_file(file_folder + "Ubuntu18.04")
+          files = get_file(file_folder + "/Ubuntu18.04")
           for file in files:
              run_command(["dpkg", "-i", f"GTB/Ubuntu18.04/{file}"])
      elif release == "20.04":
-          files = get_file(file_folder + "Ubuntu20.04")
+          files = get_file(file_folder + "/Ubuntu20.04")
           for file in files:
              run_command(["dpkg", "-i", f"GTB/Ubuntu20.04/{file}"])
      elif release == "22.04":
-          files = get_file(file_folder + "Ubuntu22.04")
+          files = get_file(file_folder + "/Ubuntu22.04")
           for file in files:
              run_command(["dpkg", "-i", f"GTB/Ubuntu22.04/{file}"])
      else:
@@ -74,19 +75,16 @@ def install_manage_engine():
      files = get_file("Manage-Engine")
      old_dir = os.getcwd()
      os.chdir("Manage-Engine")
+     print(os.getcwd())
      for file in files:
-        c1 = [f"./{file}"]
+        run_command([f"./{file}"])
      os.chdir(old_dir)
      # c3 = ["cd", ".."]
      
-     run_command(c1)
-     
-
 def install_other():
      files = get_file("Other")
      #command = ["dpkg", "-i", "Other/*.deb"]
      for file in files:
-       print(file)
        if ".sh" not in file:
           run_command(["dpkg", "-i", f"Other/{file}"])
 
@@ -106,7 +104,13 @@ def install_zscaler():
      for file in files:
         run_command([f"Zscaler/{file}", "--mode", "unattended"])
 
-install_manage_engine()
+# install_cortex()
+# install_globalprotect()
+# install_gtb_agent()
+# install_manage_engine()
+# install_other()
+# install_trellix()
+install_zscaler()
 
 #def run_command(command):
 #        process = subprocess.run(command, shell=True, capture_output=True, text=True)
