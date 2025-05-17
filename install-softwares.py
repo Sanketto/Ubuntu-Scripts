@@ -84,9 +84,16 @@ def install_trellix():
         run_command([f"Trellix-Agent-ENS/ENS/{file}"])
 
 def install_zscaler():
+     packages = "libglib2.0-0 net-tools libqt5dbus5 libqt5core5a libqt5gui5 libqt5opengl5 libqt5qml5 libqt5quick5 libqt5quickcontrols2-5 libqt5quickparticles5 libqt5quickwidgets5 libqt5sql5 libqt5sql5-sqlite libqt5webchannel5 libqt5webengine5 libqt5webenginecore5 libqt5webenginewidgets5 libqt5webkit5 libqt5webview5 libqt5widgets5 dbus libdbus-glib-1-2 libnss3-tools libnss-resolve curl jq systemd-coredump ca-certificates"
+     packages = packages.split(" ")
+     install_dependecy_packages(packages)
      files = get_file("Zscaler")
      for file in files:
         run_command([f"Zscaler/{file}", "--mode", "unattended"])
 
-def remove_program(program):
-    run_command(["apt", "autoremove", "--purge", f"{program}"])
+def join_domain():
+    
+
+def install_dependecy_packages(package_list):
+    run_command(["apt", "update"])
+    run_command(["apt", "install", *package_list])
