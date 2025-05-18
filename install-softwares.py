@@ -3,15 +3,21 @@ import lsb_release, os
 
 
 def run_command(command):
-        process = subprocess.call(command)
+     #    process = subprocess.check_call(command)
         
-        if process == 0:
-            print("Command executed successfully:")
-        else:
-            print(f"Error executing command (exit code {process.returncode}):")
-        subprocess.run("wait", shell=True, capture_output=True, text=True)
-        subprocess.run("echo", shell=True, capture_output=True, text=True)
-        subprocess.run("echo", shell=True, capture_output=True, text=True)
+     #    if process == 0:
+     #        print("Command executed successfully:")
+     #    else:
+     #        print(f"Error executing command (exit code {process.returncode}):")
+     #    subprocess.run("wait", shell=True, capture_output=True, text=True)
+     #    subprocess.run("echo", shell=True, capture_output=True, text=True)
+     #    subprocess.run("echo", shell=True, capture_output=True, text=True)
+        try:
+          subprocess.check_call(command)
+        except subprocess.CalledProcessError as e:
+          print(f"Error executing command: {e}")
+          print(f"Return code: {e.returncode}")
+          return e.returncode
 
 def get_file(file_folder):
      file_path = os.getcwd() + f"/{file_folder}"
@@ -92,8 +98,18 @@ def install_zscaler():
         run_command([f"Zscaler/{file}", "--mode", "unattended"])
 
 def join_domain():
-    
+    packages = "dnsmasq ssh realmd libnss-sss libpam-sss sssd sssd-tools adcli oddjob-mkhomedir oddjob packagekit samba-common-bin"
+    packages = packages.split(" ")
+    install_dependecy_packages(packages)
+    current_path = os.getcwd()
+    new_path = current_path + "/Domain"
+    os.chdir(new_path)
+    run_command(["bash", "join-domain.sh"])
+    os.chdir(current_path)
 
-def install_dependecy_packages(package_list):
-    run_command(["apt", "update"])
-    run_command(["apt", "install", *package_list])
+def install_dependecy_packages(package_list = None):
+    update = 1
+    while update != 0:
+      update = run_command(["apt", "update"])
+
+install_dependecy_packages()
