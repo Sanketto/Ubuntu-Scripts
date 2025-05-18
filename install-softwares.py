@@ -111,5 +111,67 @@ def install_dependecy_packages(package_list = None):
     update = 1
     while update != 0:
       update = run_command(["apt", "update"])
+    install = 1
+    while install != 0:
+        install = run_command(["apt", "install", *package_list])
+ 
 
-install_dependecy_packages()
+choice = input("KPIT TECHNOLOGIES PRIVATE LIMITED\n" \
+        "Please select the otion to perform task:\n" \
+        "1. Update and upgrade the package repository\n" \
+        "2. Install Trellix Agent and ENS\n" \
+        "3. Install Cortex\n" \
+        "4. Install GTB Agent\n" \
+        "5. Install Manage Engine\n" \
+        "6. Install Zscaler\n" \
+        "7. Install Globalprotect 6\n" \
+        "8. Install chrome and ms edge" \
+        "9. Join Linux system to Active Directory\n" \
+        "10. Configure Desktops\n" \
+        "11. Configure Laptops\n" \
+        "12. Configure proxies\n" \
+        "13. Exit\n" \
+        "Enter your choice: ")
+choice = int(choice)
+if choice == 1:
+    update = 1
+    while update != 0:
+        update = run_command(["apt", "update"])
+    upgrade = 1
+    while upgrade != 0:
+        upgrade = run_command(["apt", "upgrade", "-y"])
+elif choice == 2:
+    install_trellix()
+elif choice == 3:
+    install_cortex()
+elif choice == 4:
+    install_gtb_agent()
+elif choice == 5:
+    install_manage_engine()
+elif choice == 6:
+    install_zscaler()
+elif choice == 7:
+    install_globalprotect()
+elif choice == 8:
+    install_other()
+elif choice == 9:
+    join_domain()
+elif choice == 10:
+    install_trellix()
+    install_cortex()
+    install_gtb_agent()
+    install_manage_engine()
+    install_zscaler()
+    join_domain()
+elif choice == 11:
+    install_trellix()
+    install_cortex()
+    install_gtb_agent()
+    install_manage_engine()
+    install_zscaler()
+    install_globalprotect()
+    join_domain()
+elif choice == 13:
+    exit()
+else:
+    print("Invalid choice")
