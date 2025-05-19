@@ -116,7 +116,7 @@ def install_dependecy_packages(package_list = None):
         install = run_command(["apt", "install", *package_list])
 
 def configure_proxies(proxy):
-       file = open("/etc/environment","+r")
+       file = open("/etc/environment","r")
        data = file.readlines()
        proxy_count = 0
        new_data = ""
@@ -128,11 +128,17 @@ def configure_proxies(proxy):
                data[line] = data[line].replace(data[line], f'''https_proxy="{proxy}"\n''')
                proxy_count += 1
            new_data = new_data + data[line]
-       file.write(new_data)
+           print(new_data)
+       file.close()
        if proxy_count == 0:
            file = open("/etc/environment","a")
            file.write(f'''http_proxy="{proxy}"\n''')
            file.write(f'''https_proxy="{proxy}"''')
+           print("new added")
+           file.close()
+           return
+       file = open("/etc/environment","w")
+       file.write(new_data)
        file.close()
        
 
@@ -217,7 +223,12 @@ while choice != 13:
               exit()
           else:
               print("Invalid choice")
+              continue
+          print("Proxy has been added")
+          exit()
    elif choice == 13:
        exit()
    else:
        print("Invalid choice")
+
+#PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
