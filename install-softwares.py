@@ -114,64 +114,110 @@ def install_dependecy_packages(package_list = None):
     install = 1
     while install != 0:
         install = run_command(["apt", "install", *package_list])
- 
 
-choice = input("KPIT TECHNOLOGIES PRIVATE LIMITED\n" \
-        "Please select the otion to perform task:\n" \
-        "1. Update and upgrade the package repository\n" \
-        "2. Install Trellix Agent and ENS\n" \
-        "3. Install Cortex\n" \
-        "4. Install GTB Agent\n" \
-        "5. Install Manage Engine\n" \
-        "6. Install Zscaler\n" \
-        "7. Install Globalprotect 6\n" \
-        "8. Install chrome and ms edge" \
-        "9. Join Linux system to Active Directory\n" \
-        "10. Configure Desktops\n" \
-        "11. Configure Laptops\n" \
-        "12. Configure proxies\n" \
-        "13. Exit\n" \
-        "Enter your choice: ")
-choice = int(choice)
-if choice == 1:
-    update = 1
-    while update != 0:
-        update = run_command(["apt", "update"])
-    upgrade = 1
-    while upgrade != 0:
-        upgrade = run_command(["apt", "upgrade", "-y"])
-elif choice == 2:
-    install_trellix()
-elif choice == 3:
-    install_cortex()
-elif choice == 4:
-    install_gtb_agent()
-elif choice == 5:
-    install_manage_engine()
-elif choice == 6:
-    install_zscaler()
-elif choice == 7:
-    install_globalprotect()
-elif choice == 8:
-    install_other()
-elif choice == 9:
-    join_domain()
-elif choice == 10:
-    install_trellix()
-    install_cortex()
-    install_gtb_agent()
-    install_manage_engine()
-    install_zscaler()
-    join_domain()
-elif choice == 11:
-    install_trellix()
-    install_cortex()
-    install_gtb_agent()
-    install_manage_engine()
-    install_zscaler()
-    install_globalprotect()
-    join_domain()
-elif choice == 13:
-    exit()
-else:
-    print("Invalid choice")
+def configure_proxies(proxy):
+       file = open("/etc/environment","+r")
+       data = file.readlines()
+       proxy_count = 0
+       new_data = ""
+       for line in range(len(data)):
+           if f'''http_proxy="{proxy}"''' in data[line]:
+               data[line] = data[line].replace(data[line], f'''http_proxy="{proxy}"\n''')
+               proxy_count += 1
+           elif f'''https_proxy="{proxy}"''' in data[line]:
+               data[line] = data[line].replace(data[line], f'''https_proxy="{proxy}"\n''')
+               proxy_count += 1
+           new_data = new_data + data[line]
+       file.write(new_data)
+       if proxy_count == 0:
+           file = open("/etc/environment","a")
+           file.write(f'''http_proxy="{proxy}"\n''')
+           file.write(f'''https_proxy="{proxy}"''')
+       file.close()
+       
+
+choice = 0
+while choice != 13:
+
+   choice = input("KPIT TECHNOLOGIES PRIVATE LIMITED\n" \
+           "Please select the otion to perform task:\n" \
+           "\t1. Update and upgrade the package repository\n" \
+           "\t2. Install Trellix Agent and ENS\n" \
+           "\t3. Install Cortex\n" \
+           "\t4. Install GTB Agent\n" \
+           "\t5. Install Manage Engine\n" \
+           "\t6. Install Zscaler\n" \
+           "\t7. Install Globalprotect 6\n" \
+           "\t8. Install chrome and ms edge\n" \
+           "\t9. Join Linux system to Active Directory\n" \
+           "\t10. Configure Desktops\n" \
+           "\t11. Configure Laptops\n" \
+           "\t12. Configure proxies\n" \
+           "\t13. Exit\n" \
+           "\tEnter your choice: ")
+   if choice.isalpha():
+              print("Invalid choice")
+              continue
+   choice = int(choice)
+   if choice == 1:
+       update = 1
+       while update != 0:
+           update = run_command(["apt", "update"])
+       upgrade = 1
+       while upgrade != 0:
+           upgrade = run_command(["apt", "upgrade", "-y"])
+   elif choice == 2:
+       install_trellix()
+   elif choice == 3:
+       install_cortex()
+   elif choice == 4:
+       install_gtb_agent()
+   elif choice == 5:
+       install_manage_engine()
+   elif choice == 6:
+       install_zscaler()
+   elif choice == 7:
+       install_globalprotect()
+   elif choice == 8:
+       install_other()
+   elif choice == 9:
+       join_domain()
+   elif choice == 10:
+       install_trellix()
+       install_cortex()
+       install_gtb_agent()
+       install_manage_engine()
+       install_zscaler()
+       join_domain()
+   elif choice == 11:
+       install_trellix()
+       install_cortex()
+       install_gtb_agent()
+       install_manage_engine()
+       install_zscaler()
+       install_globalprotect()
+       join_domain()
+   elif choice == 12:
+       which_proxy = 0
+       while which_proxy != 3:  
+          which_proxy = input("Please select which proxies need to be configure\n" \
+          "\t 1. General proxies\n" \
+          "\t 2. Panasonic proxies\n" \
+          "\t 3. Exit\n" \
+          "\t Enter your choice: ")
+          if which_proxy.isalpha():
+              print("Invalid choice")
+              continue 
+          which_proxy = int(which_proxy)
+          if which_proxy == 1:
+             configure_proxies("http://127.0.0.1:27001")
+          elif which_proxy == 2:
+              configure_proxies("http://10.77.8.80:8080")
+          elif which_proxy == 3:
+              exit()
+          else:
+              print("Invalid choice")
+   elif choice == 13:
+       exit()
+   else:
+       print("Invalid choice")
