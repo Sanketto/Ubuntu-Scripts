@@ -1,4 +1,8 @@
 #!/bin/bash
+display=":$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
+user=$(who | grep '('$display')' | awk '{print $1}' | head -n 1)
+uid=$(id -u $user)
+
 nmcli connection delete KPIT-AD-USER
 if [ "$USERNAME" = "kpit" ]; then
 exit 0
