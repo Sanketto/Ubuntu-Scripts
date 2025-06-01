@@ -1,6 +1,8 @@
 #!/bin/bash
-
-if [ "$USERNAME" = "kpit" ]; then
+is_laptop=$(nmcli device wifi)
+is_local_login=$(cut -d: -f1 /etc/passwd | grep -w "$USERNAME")
+#don't execute this if loging as local user ot if its desktop
+if [ -z "$is_laptop" ] || [ -n "$is_local_login" ]; then
 exit 0
 fi
 function connect_wifi(){
